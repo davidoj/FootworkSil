@@ -846,6 +846,10 @@ struct player_type
 	s16b msp;			/* Max mana pts */
 	s16b csp;			/* Cur mana pts */
 	u16b csp_frac;		/* Cur mana frac (times 2^16) */
+  
+	s16b mbl;               /* Max balance pts */
+	s16b cbl;               /* Cur balance pts */
+	u16b cbl_frac;          /* Cur balance frac (times 2^16) */
 
 	s16b stat_base[A_MAX];		/* The base ('internal') stat values */
 	s16b stat_drain[A_MAX];		/* The negative modifier from stat drain */

@@ -1584,6 +1584,9 @@ static bool player_birth_aux_2(void)
 		calc_voice();
 		p_ptr->csp = p_ptr->msp;
 
+		/* Full balance */
+		p_ptr->cbl = p_ptr->mbl;
+
 		/* Display the player */
 		display_player(0);
 

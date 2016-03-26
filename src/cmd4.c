@@ -222,7 +222,7 @@ void do_cmd_redraw(void)
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
 	/* Update stuff */
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
+	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_BL);
 
 	/* Fully update the visuals */
 	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);

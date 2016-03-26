@@ -476,6 +476,42 @@ static void prt_sp(void)
 	c_put_str(color, tmp, ROW_SP, COL_SP + 12 - len);
 }
 
+/*
+ * Prints player's max/cur balance points
+ */
+
+static void prt_bl(void)
+{
+	char tmp[32];
+	byte color;
+	int len;
+
+
+	put_str("Bal         ", ROW_BL, COL_BL);
+	
+	len = sprintf(tmp, "%d:%d", p_ptr->cbl, p_ptr->mbl);
+
+	c_put_str(TERM_L_GREEN, tmp, ROW_BL, COL_BL + 12 - len);
+
+	/* Done? */
+	if (p_ptr->cbl >= p_ptr->mbl) return;
+
+	if (p_ptr->cbl > (p_ptr->msp * op_ptr->hitpoint_warn) / 10)
+	{
+		color = TERM_YELLOW;
+	}
+	else
+	{
+		color = TERM_RED;
+	}
+
+	/* Show current balance using another color */
+	sprintf(tmp, "%d", p_ptr->cbl);
+
+	c_put_str(color, tmp, ROW_BL, COL_BL + 12 - len);
+	
+}
+
 
 /*
  * Prints player's current song (if any)
@@ -1146,6 +1182,10 @@ static void prt_frame_basic(void)
 
 	/* redraw monster health */
 	health_redraw();
+
+	/* Balance */
+	prt_bl();
+
 }
 
 
@@ -1487,6 +1527,51 @@ extern void calc_voice(void)
 	/* Hack -- handle "xtra" mode */
 	if (character_xtra) return;
 
+}
+
+
+/*
+ * Calculate the player's (maximal) balance
+ *
+ * Adjust current balance if necessary
+ *
+ * FootworkSil - new mechanic
+ */
+
+static void calc_balance(void)
+{
+	int mbl;
+	int i;
+	int tmp;
+
+	/* Get balance value */
+	// just 10 for now
+
+	mbl = 10;
+	
+	/* New maximum balance */
+	if (p_ptr->mbl != mbl)
+	{
+		int i = 100;
+
+		/* Get percentage of maximum hp */
+		if (p_ptr->mbl) i = ((100 * p_ptr->cbl) / p_ptr->mbl);
+
+		/* Save new limit */
+		p_ptr->mbl = mbl;
+
+		/* Update current maximum hp */
+		p_ptr->cbl = ((i * p_ptr->mbl) / 100) + (((i * p_ptr->mbl) % 100 >= 50)	? 1 : 0);
+
+		/* Hack - any change in max hitpoint resets frac */
+		p_ptr->cbl_frac = 0;
+
+		/* Display hp later */
+		p_ptr->redraw |= (PR_BL);
+
+		/* Window stuff */
+		p_ptr->window |= (PW_PLAYER_0);
+	}
 }
 
 
@@ -3020,6 +3105,12 @@ void update_stuff(void)
 		calc_hitpoints();
 	}
 
+	if (p_ptr->update & (PU_BL))
+		{
+			p_ptr->update &= ~(PU_BL);
+			calc_balance();
+		}
+
 	if (p_ptr->update & (PU_MANA))
 	{
 		p_ptr->update &= ~(PU_MANA);
@@ -3092,7 +3183,7 @@ void redraw_stuff(void)
 		p_ptr->redraw &= ~(PR_BASIC);
 		p_ptr->redraw &= ~(PR_STATS);
 		p_ptr->redraw &= ~(PR_MEL | PR_EXP | PR_ARC);
-		p_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_VOICE | PR_SONG);
+		p_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_VOICE | PR_SONG | PR_BL);
 		p_ptr->redraw &= ~(PR_DEPTH | PR_HEALTHBAR);
 		p_ptr->redraw &= ~(PR_RESIST);
 		prt_frame_basic();
@@ -3254,6 +3345,13 @@ void redraw_stuff(void)
 		p_ptr->redraw &= ~(PR_TERRAIN);
         prt_terrain();
 	}
+
+	if (p_ptr->redraw & (PR_BL))
+		{
+			p_ptr->redraw &= ~(PR_BL);
+			prt_bl();
+		}
+
 }
 
 

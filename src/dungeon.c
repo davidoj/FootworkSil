@@ -394,13 +394,35 @@ static void regenmana(int regen_multiplier)
 
 	/* Redraw mana */
 	if (old_csp != p_ptr->csp)
-	{
+		{
 		/* Redraw */
 		p_ptr->redraw |= (PR_VOICE);
 
 		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER_0);
-	}
+		}
+}
+
+/*
+ * Regenrate balance
+ */
+
+static void regenbalance(int regen_multiplier)
+{
+
+	int old_bal;
+
+
+	// exit immediately if the multiplier is zero (avoids div by zero error)
+	if (regen_multiplier == 0) return;
+
+	if (old_bal != p_ptr->cbl)
+		{
+			p_ptr-> redraw |= (PR_BL);
+
+			p_ptr->window |= (PW_PLAYER_0);	
+		}
+
 }
 
 
@@ -2591,7 +2613,7 @@ static void dungeon(void)
 	Term_clear();
 
 	/* Update stuff */
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
+	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_BL);
 
 	/* Update stuff */
 	update_stuff();
@@ -2624,7 +2646,7 @@ static void dungeon(void)
 	character_xtra--;
 
 	/* Update stuff */
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
+	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_BL);
 
 	/* Combine / Reorder the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);

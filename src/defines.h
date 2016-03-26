@@ -703,6 +703,9 @@
 #define ROW_SP			11
 #define COL_SP			0	/* "SP xxxxxxxxx" */
 
+#define ROW_BL          12
+#define COL_BL          0  /* "Bal xxxxxxxxx" */
+
 #define ROW_EQUIPPY		13
 #define COL_EQUIPPY		0	/* equippy chars */
 
@@ -1480,6 +1483,7 @@
 /* xxx (many) */
 #define PU_HP			0x00000010L	/* Calculate chp and mhp */
 #define PU_MANA			0x00000020L	/* Calculate csp and msp */
+#define PU_BL           0x00000080L /* Calculate cbl and mbl */
 /* xxx (many) */
 #define PU_FORGET_VIEW	0x00010000L	/* Forget field of view */
 #define PU_UPDATE_VIEW	0x00020000L	/* Update field of view */
@@ -1520,7 +1524,7 @@
 #define PR_RESIST		0X00800000L	/* Display Resistances */
 #define PR_EXTRA		0x01000000L	/* Display Extra Info */
 #define PR_BASIC		0x02000000L	/* Display Basic Info */
-/* xxx */
+#define PR_BL		    0x04000000L	/* Display Balance */
 #define PR_MAP			0x08000000L	/* Display Map */
 /* xxx (many) */
 

@@ -814,6 +814,10 @@ static errr rd_extra(void)
 	rd_s16b(&p_ptr->csp);
 	rd_u16b(&p_ptr->csp_frac);
 
+	rd_s16b(&p_ptr->mbl);
+	rd_s16b(&p_ptr->cbl);
+	rd_u16b(&p_ptr->cbl_frac);
+
 	rd_s16b(&p_ptr->max_depth);
 
 	/* Hack -- Repair maximum dungeon level */

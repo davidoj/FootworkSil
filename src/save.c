@@ -826,6 +826,10 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->csp);
 	wr_u16b(p_ptr->csp_frac);
 
+	wr_s16b(p_ptr->mbl);
+	wr_s16b(p_ptr->cbl);
+	wr_u16b(p_ptr->cbl_frac);
+
 	/* Max Dungeon Level */
 	wr_s16b(p_ptr->max_depth);
 	
